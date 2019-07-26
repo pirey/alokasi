@@ -5,7 +5,7 @@ import { back, check, withPlus, withMinus } from 'react-icons-kit/entypo'
 import accounting from 'accounting'
 import Type from 'union-type'
 
-const BG_PRIMARY = '#563d7c'
+const COLOR_PRIMARY = '#563d7c'
 
 const Action = Type({
   Iddle: [],
@@ -149,11 +149,11 @@ function NewEntry(props) {
           onClick={handleSave}
           variant="light"
           className="rounded-0"
-          style={{ backgroundColor: BG_PRIMARY }}
+          style={{ backgroundColor: COLOR_PRIMARY }}
         >
           <Icon icon={check} className="text-white" />
         </Button>
-        <Button onClick={onCancel} variant="light">
+        <Button onClick={onCancel} variant="light" className="rounded-0">
           <Icon icon={back} />
         </Button>
       </ButtonGroup>
@@ -191,12 +191,20 @@ function Remaining(props) {
   if (remaining === 0) {
     return (
       <Card.Footer className="fixed-bottom rounded-0 p-0">
-        <SingleInput
-          value=""
-          readOnly
-          label="SEMUA TERALOKASI"
-          className="text-info"
-        />
+        <InputGroup>
+          <Form.Control
+            value="PAS"
+            readOnly
+            className="border-0 rounded-0 font-weight-bold text-info"
+          />
+          <InputGroup.Append>
+            <InputGroup.Text
+              className="border-0 rounded-0 font-weight-bold text-uppercase"
+            >
+              <Icon icon={check} className="text-info" />
+            </InputGroup.Text>
+          </InputGroup.Append>
+        </InputGroup>
       </Card.Footer>
     )
   }
@@ -231,14 +239,14 @@ function App() {
       [key]: incomes[key] ? incomes[key] + value : value
     })
 
-  const removeExpenseItem = (key) =>
+  const removeExpenseItem = key =>
     setExpenses(
       Object.keys(expenses)
         .filter(_key => _key !== key)
         .reduce((result, key) => ({ ...result, [key]: expenses[key] }), {})
     )
 
-  const removeIncomeItem = (key) =>
+  const removeIncomeItem = key =>
     setIncomes(
       Object.keys(incomes)
         .filter(_key => _key !== key)
@@ -277,13 +285,13 @@ function App() {
     <Card className="border-top-0 border-left-0 border-right-0 border-bottom-0">
       <Card.Header
         className="rounded-0 text-center font-weight-bold"
-        style={{ backgroundColor: BG_PRIMARY, color: 'white' }}
+        style={{ backgroundColor: COLOR_PRIMARY, color: 'white' }}
       >
         ALOKASI
       </Card.Header>
       <Card.Body className="p-0">
         <SingleInput
-          label="SALDO"
+          label="DANA"
           value={formatMoney(budget)}
           onChange={e => setBudget(parseMoney(e.target.value))}
           className="text-info"
@@ -316,7 +324,7 @@ function App() {
               ),
               AddExpense: () => (
                 <NewEntry
-                  placeholder="NAMA ANGGARAN"
+                  placeholder="ANGGARAN"
                   onSave={handleAddExpense}
                   onCancel={closeNewEntry}
                 />
