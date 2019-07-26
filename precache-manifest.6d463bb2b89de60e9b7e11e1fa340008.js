@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c73da39a85460a9ff9c460dd224a4f4f",
+    "revision": "17db6387a2ef72a08896e70b0f3a9f62",
     "url": "/alokasi/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/alokasi/static/css/2.266e55a5.chunk.css"
   },
   {
-    "revision": "a07090039823c9c063e7",
+    "revision": "73a1ba67c47bd6db99a0",
     "url": "/alokasi/static/css/main.abc26ff8.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/alokasi/static/js/2.bddf95ef.chunk.js"
   },
   {
-    "revision": "a07090039823c9c063e7",
-    "url": "/alokasi/static/js/main.1f8ecfe9.chunk.js"
+    "revision": "73a1ba67c47bd6db99a0",
+    "url": "/alokasi/static/js/main.a48195c4.chunk.js"
   },
   {
     "revision": "c5b5fe7d5860674b114b",
