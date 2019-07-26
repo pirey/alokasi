@@ -5,6 +5,8 @@ import { back, check, withPlus, withMinus } from 'react-icons-kit/entypo'
 import accounting from 'accounting'
 import Type from 'union-type'
 
+const BG_PRIMARY = '#563d7c'
+
 const Action = Type({
   Iddle: [],
   AddExpense: [],
@@ -54,7 +56,14 @@ function SingleInput(props) {
 }
 
 function DualInput(props) {
-  const { label, readOnly, value, onChangeValue, onChangeLabel } = props
+  const {
+    placeholder,
+    label,
+    readOnly,
+    value,
+    onChangeValue,
+    onChangeLabel
+  } = props
   return (
     <InputGroup>
       <Form.Control
@@ -62,7 +71,7 @@ function DualInput(props) {
         onChange={onChangeLabel}
         readOnly={readOnly}
         className="border-0 rounded-0 font-weight-bold text-uppercase"
-        placeholder="Nama Anggaran"
+        placeholder={placeholder}
       />
       <Form.Control
         inputMode="number"
@@ -116,7 +125,7 @@ function IncomeList(props) {
 }
 
 function NewEntry(props) {
-  const { onSave, onCancel } = props
+  const { placeholder, onSave, onCancel } = props
   const [label, setLabel] = useState('')
   const [value, setValue] = useState('')
 
@@ -127,14 +136,20 @@ function NewEntry(props) {
   return (
     <>
       <DualInput
+        placeholder={placeholder}
         label={label}
         value={formatMoney(value)}
         onChangeValue={e => setValue(parseMoney(e.target.value))}
         onChangeLabel={e => setLabel(e.target.value)}
       />
       <ButtonGroup className="d-flex">
-        <Button onClick={handleSave} variant="light" className="rounded-0">
-          <Icon icon={check} className="text-primary" />
+        <Button
+          onClick={handleSave}
+          variant="light"
+          className="rounded-0"
+          style={{ backgroundColor: BG_PRIMARY }}
+        >
+          <Icon icon={check} className="text-white" />
         </Button>
         <Button onClick={onCancel} variant="light">
           <Icon icon={back} />
@@ -227,7 +242,7 @@ function App() {
   }
 
   const handleAddIncome = ([key, value]) => {
-    if (key.trim() === '' || value.trim() === '') {
+    if (key.trim() === '' || value === '') {
       return
     }
     setIncomeItem(key, value)
@@ -235,7 +250,7 @@ function App() {
   }
 
   const handleAddExpense = ([key, value]) => {
-    if (key.trim() === '' || value.trim() === '') {
+    if (key.trim() === '' || value === '') {
       return
     }
     setExpenseItem(key, value)
@@ -246,7 +261,7 @@ function App() {
     <Card className="border-top-0 border-left-0 border-right-0 border-bottom-0">
       <Card.Header
         className="rounded-0 text-center font-weight-bold"
-        style={{ backgroundColor: '#563d7c', color: 'white' }}
+        style={{ backgroundColor: BG_PRIMARY, color: 'white' }}
       >
         ALOKASI
       </Card.Header>
@@ -280,10 +295,18 @@ function App() {
                 </ButtonGroup>
               ),
               AddExpense: () => (
-                <NewEntry onSave={handleAddExpense} onCancel={closeNewEntry} />
+                <NewEntry
+                  placeholder="NAMA ANGGARAN"
+                  onSave={handleAddExpense}
+                  onCancel={closeNewEntry}
+                />
               ),
               AddIncome: () => (
-                <NewEntry onSave={handleAddIncome} onCancel={closeNewEntry} />
+                <NewEntry
+                  placeholder="SUMBER PEMASUKAN"
+                  onSave={handleAddIncome}
+                  onCancel={closeNewEntry}
+                />
               )
             })(action)
           : null}
