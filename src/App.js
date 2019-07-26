@@ -30,9 +30,9 @@ function parseMoney(amountString) {
 }
 
 function SingleInput(props) {
-  const { label, readOnly, value, onChange, className } = props
+  const { label, readOnly, value, onChange, className, onClick } = props
   return (
-    <InputGroup>
+    <InputGroup onClick={onClick}>
       <InputGroup.Prepend>
         <InputGroup.Text
           className={`border-0 rounded-0 font-weight-bold text-uppercase ${
@@ -85,7 +85,7 @@ function DualInput(props) {
 }
 
 function ExpenseList(props) {
-  const { expenses } = props
+  const { expenses, onSelectItem } = props
   if (Object.keys(expenses).length <= 0) {
     return null
   }
@@ -98,6 +98,7 @@ function ExpenseList(props) {
           value={formatMoney(expenses[key])}
           readOnly
           className="text-danger"
+          onClick={() => onSelectItem(key)}
         />
       ))}
     </>
@@ -105,7 +106,7 @@ function ExpenseList(props) {
 }
 
 function IncomeList(props) {
-  const { incomes } = props
+  const { incomes, onSelectItem } = props
   if (Object.keys(incomes).length <= 0) {
     return null
   }
@@ -118,6 +119,7 @@ function IncomeList(props) {
           value={formatMoney(incomes[key])}
           readOnly
           className="text-success"
+          onClick={() => onSelectItem(key)}
         />
       ))}
     </>
@@ -229,6 +231,20 @@ function App() {
       [key]: incomes[key] ? incomes[key] + value : value
     })
 
+  const removeExpenseItem = (key) =>
+    setExpenses(
+      Object.keys(expenses)
+        .filter(_key => _key !== key)
+        .reduce((result, key) => ({ ...result, [key]: expenses[key] }), {})
+    )
+
+  const removeIncomeItem = (key) =>
+    setIncomes(
+      Object.keys(incomes)
+        .filter(_key => _key !== key)
+        .reduce((result, key) => ({ ...result, [key]: incomes[key] }), {})
+    )
+
   const closeNewEntry = () => {
     setAction(Action.Iddle)
   }
@@ -272,8 +288,12 @@ function App() {
           onChange={e => setBudget(parseMoney(e.target.value))}
           className="text-info"
         />
-        {budget ? <IncomeList incomes={incomes} /> : null}
-        {budget ? <ExpenseList expenses={expenses} /> : null}
+        {budget ? (
+          <IncomeList onSelectItem={removeIncomeItem} incomes={incomes} />
+        ) : null}
+        {budget ? (
+          <ExpenseList onSelectItem={removeExpenseItem} expenses={expenses} />
+        ) : null}
         {budget
           ? Action.case({
               Iddle: () => (
