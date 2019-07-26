@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/alokasi/static/css/main.abc26ff8.chunk.css",
-    "main.js": "/alokasi/static/js/main.c08b1e70.chunk.js",
-    "main.js.map": "/alokasi/static/js/main.c08b1e70.chunk.js.map",
+    "main.css": "/alokasi/static/css/main.23951e98.chunk.css",
+    "main.js": "/alokasi/static/js/main.4fa8ec69.chunk.js",
+    "main.js.map": "/alokasi/static/js/main.4fa8ec69.chunk.js.map",
     "runtime~main.js": "/alokasi/static/js/runtime~main.78ba4bcf.js",
     "runtime~main.js.map": "/alokasi/static/js/runtime~main.78ba4bcf.js.map",
     "static/css/2.266e55a5.chunk.css": "/alokasi/static/css/2.266e55a5.chunk.css",
-    "static/js/2.a89c13b1.chunk.js": "/alokasi/static/js/2.a89c13b1.chunk.js",
-    "static/js/2.a89c13b1.chunk.js.map": "/alokasi/static/js/2.a89c13b1.chunk.js.map",
+    "static/js/2.0fc6991c.chunk.js": "/alokasi/static/js/2.0fc6991c.chunk.js",
+    "static/js/2.0fc6991c.chunk.js.map": "/alokasi/static/js/2.0fc6991c.chunk.js.map",
     "index.html": "/alokasi/index.html",
-    "precache-manifest.f78f32ce9367a8182aacb9a11c638bf3.js": "/alokasi/precache-manifest.f78f32ce9367a8182aacb9a11c638bf3.js",
+    "precache-manifest.b8af5cefe1531d5179de53beec17ebf2.js": "/alokasi/precache-manifest.b8af5cefe1531d5179de53beec17ebf2.js",
     "service-worker.js": "/alokasi/service-worker.js",
     "static/css/2.266e55a5.chunk.css.map": "/alokasi/static/css/2.266e55a5.chunk.css.map",
-    "static/css/main.abc26ff8.chunk.css.map": "/alokasi/static/css/main.abc26ff8.chunk.css.map"
+    "static/css/main.23951e98.chunk.css.map": "/alokasi/static/css/main.23951e98.chunk.css.map"
   }
 }
