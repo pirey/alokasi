@@ -1,10 +1,12 @@
 {
   "name": "alokasi",
+  "homepage": "http://yeripratama.com/alokasi",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "accounting": "^0.4.1",
     "bootstrap": "^4.3.1",
+    "gh-pages": "^2.0.1",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.9",
     "react-dom": "^16.8.6",
@@ -13,6 +15,8 @@
     "union-type": "^0.4.1"
   },
   "scripts": {
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
