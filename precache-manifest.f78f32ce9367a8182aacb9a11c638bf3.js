@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "17db6387a2ef72a08896e70b0f3a9f62",
+    "revision": "7263010e27889c493edc82a47da9efa4",
     "url": "/alokasi/index.html"
   },
   {
-    "revision": "a3a2660d014630aae47f",
+    "revision": "a33fcb7d294fa52dcbeb",
     "url": "/alokasi/static/css/2.266e55a5.chunk.css"
   },
   {
-    "revision": "73a1ba67c47bd6db99a0",
+    "revision": "993b516edded473954fb",
     "url": "/alokasi/static/css/main.abc26ff8.chunk.css"
   },
   {
-    "revision": "a3a2660d014630aae47f",
-    "url": "/alokasi/static/js/2.bddf95ef.chunk.js"
+    "revision": "a33fcb7d294fa52dcbeb",
+    "url": "/alokasi/static/js/2.a89c13b1.chunk.js"
   },
   {
-    "revision": "73a1ba67c47bd6db99a0",
-    "url": "/alokasi/static/js/main.a48195c4.chunk.js"
+    "revision": "993b516edded473954fb",
+    "url": "/alokasi/static/js/main.c08b1e70.chunk.js"
   },
   {
     "revision": "c5b5fe7d5860674b114b",
