@@ -189,7 +189,7 @@ function Remaining(props) {
 
 function App() {
   const [action, setAction] = useState(Action.Iddle)
-  const [budget, setBudget] = useState('7000000')
+  const [budget, setBudget] = useState('')
   const [expenses, setExpenses] = useState({})
   const [incomes, setIncomes] = useState({})
 
