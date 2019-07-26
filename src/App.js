@@ -7,15 +7,19 @@ import Type from 'union-type'
 
 const Action = Type({
   Iddle: [],
-  AddExpense: [Object],
-  AddIncome: [Object]
+  AddExpense: [],
+  AddIncome: []
 })
 
 function formatMoney(amount) {
   const precision = 0
   const decimal = ','
-  const separator = '.'
-  return accounting.formatNumber(amount, precision, separator, decimal)
+  const thousand = '.'
+  return accounting.formatNumber(amount, {
+    precision,
+    thousand,
+    decimal
+  })
 }
 
 function parseMoney(amountString) {
@@ -23,22 +27,47 @@ function parseMoney(amountString) {
   return accounting.unformat(amountString, decimal)
 }
 
-function AmountInput(props) {
-  const { label, readOnly, value, onChange } = props
+function SingleInput(props) {
+  const { label, readOnly, value, onChange, className } = props
   return (
     <InputGroup>
       <InputGroup.Prepend>
         <InputGroup.Text
-          className={`border-0 rounded-0 font-weight-bold ${
+          className={`border-0 rounded-0 font-weight-bold text-uppercase ${
             readOnly ? '' : 'bg-white'
-          }`}
+          } ${className ? className : ''}`}
         >
           {label}
         </InputGroup.Text>
       </InputGroup.Prepend>
       <Form.Control
-        value={formatMoney(value)}
+        inputMode="number"
+        value={value}
         onChange={onChange}
+        readOnly={readOnly}
+        className={`border-0 rounded-0 text-right font-weight-bold ${
+          className ? className : ''
+        }`}
+      />
+    </InputGroup>
+  )
+}
+
+function DualInput(props) {
+  const { label, readOnly, value, onChangeValue, onChangeLabel } = props
+  return (
+    <InputGroup>
+      <Form.Control
+        value={label}
+        onChange={onChangeLabel}
+        readOnly={readOnly}
+        className="border-0 rounded-0 font-weight-bold text-uppercase"
+        placeholder="Nama Anggaran"
+      />
+      <Form.Control
+        inputMode="number"
+        value={value}
+        onChange={onChangeValue}
         readOnly={readOnly}
         className="border-0 rounded-0 text-right font-weight-bold"
       />
@@ -46,34 +75,170 @@ function AmountInput(props) {
   )
 }
 
-function App() {
-  const [budget, setBudget] = useState('')
-  const [expenses, setExpenses] = useState({})
-  const [incomes, setIncomes] = useState({})
+function ExpenseList(props) {
+  const { expenses } = props
+  if (Object.keys(expenses).length <= 0) {
+    return null
+  }
+  return (
+    <>
+      {Object.keys(expenses).map(key => (
+        <SingleInput
+          key={key}
+          label={key}
+          value={formatMoney(expenses[key])}
+          readOnly
+          className="text-danger"
+        />
+      ))}
+    </>
+  )
+}
 
-  const [newEntry, setNewEntry] = useState('')
+function IncomeList(props) {
+  const { incomes } = props
+  if (Object.keys(incomes).length <= 0) {
+    return null
+  }
+  return (
+    <>
+      {Object.keys(incomes).map(key => (
+        <SingleInput
+          key={key}
+          label={key}
+          value={formatMoney(incomes[key])}
+          readOnly
+          className="text-success"
+        />
+      ))}
+    </>
+  )
+}
 
-  const [action, setAction] = useState(Action.Iddle)
+function NewEntry(props) {
+  const { onSave, onCancel } = props
+  const [label, setLabel] = useState('')
+  const [value, setValue] = useState('')
 
-  const setExpense = (key, value) => setExpenses({ ...expenses, [key]: value })
-  // eslint-disable-next-line
-  const setIncome = (key, value) => setIncomes({ ...incomes, [key]: value })
+  const handleSave = () => {
+    onSave([label, value])
+  }
 
-  // eslint-disable-next-line
-  const handleNewEntryExpense = e => {
-    setAction(
-      Action.AddExpense({
-        label: 'My Expense',
-        value: formatMoney(newEntry),
-        onChangeValue: e => setNewEntry(parseMoney(e.target.value))
-      })
+  return (
+    <>
+      <DualInput
+        label={label}
+        value={formatMoney(value)}
+        onChangeValue={e => setValue(parseMoney(e.target.value))}
+        onChangeLabel={e => setLabel(e.target.value)}
+      />
+      <ButtonGroup className="d-flex">
+        <Button onClick={handleSave} variant="light" className="rounded-0">
+          <Icon icon={check} className="text-primary" />
+        </Button>
+        <Button onClick={onCancel} variant="light">
+          <Icon icon={back} />
+        </Button>
+      </ButtonGroup>
+    </>
+  )
+}
+
+function Remaining(props) {
+  const { remaining } = props
+  console.log(remaining)
+  if (remaining > 0) {
+    return (
+      <Card.Footer className="fixed-bottom rounded-0 p-0">
+        <SingleInput
+          value={formatMoney(remaining)}
+          readOnly
+          label="SISA"
+          className="text-success"
+        />
+      </Card.Footer>
+    )
+  }
+  if (remaining < 0) {
+    return (
+      <Card.Footer className="fixed-bottom rounded-0 p-0">
+        <SingleInput
+          value={formatMoney(remaining)}
+          readOnly
+          label="KURANG"
+          className="text-danger"
+        />
+      </Card.Footer>
+    )
+  }
+  if (remaining === 0) {
+    return (
+      <Card.Footer className="fixed-bottom rounded-0 p-0">
+        <SingleInput
+          value=""
+          readOnly
+          label="SEMUA TERALOKASI"
+          className="text-info"
+        />
+      </Card.Footer>
     )
   }
 
-  // eslint-disable-next-line
-  const handleAddExpense = (key, value) => {
-    setExpense(key, value)
-    setNewEntry('')
+  return null
+}
+
+function App() {
+  const [action, setAction] = useState(Action.Iddle)
+  const [budget, setBudget] = useState('7000000')
+  const [expenses, setExpenses] = useState({})
+  const [incomes, setIncomes] = useState({})
+
+  const sumReducer = (sum, item) => sum + item
+
+  const calculateRemaining = () => {
+    const totalExpense = Object.values(expenses).reduce(sumReducer, 0)
+    const totalIncome = Object.values(incomes).reduce(sumReducer, 0)
+    const totalRemaining = budget + totalIncome - totalExpense
+    return totalRemaining
+  }
+
+  const setExpenseItem = (key, value) =>
+    setExpenses({
+      ...expenses,
+      [key]: expenses[key] ? expenses[key] + value : value
+    })
+
+  const setIncomeItem = (key, value) =>
+    setIncomes({
+      ...incomes,
+      [key]: incomes[key] ? incomes[key] + value : value
+    })
+
+  const closeNewEntry = () => {
+    setAction(Action.Iddle)
+  }
+
+  const openExpenseNewEntry = () => {
+    setAction(Action.AddExpense)
+  }
+
+  const openIncomeNewEntry = () => {
+    setAction(Action.AddIncome)
+  }
+
+  const handleAddIncome = ([key, value]) => {
+    if (key.trim() === '' || value.trim() === '') {
+      return
+    }
+    setIncomeItem(key, value)
+    setAction(Action.Iddle)
+  }
+
+  const handleAddExpense = ([key, value]) => {
+    if (key.trim() === '' || value.trim() === '') {
+      return
+    }
+    setExpenseItem(key, value)
     setAction(Action.Iddle)
   }
 
@@ -86,55 +251,44 @@ function App() {
         ALOKASI
       </Card.Header>
       <Card.Body className="p-0">
-        <AmountInput
-          label="ANGGARAN"
-          value={budget}
+        <SingleInput
+          label="SALDO"
+          value={formatMoney(budget)}
           onChange={e => setBudget(parseMoney(e.target.value))}
+          className="text-info"
         />
+        {budget ? <IncomeList incomes={incomes} /> : null}
+        {budget ? <ExpenseList expenses={expenses} /> : null}
         {budget
           ? Action.case({
               Iddle: () => (
                 <ButtonGroup className="d-flex">
-                  <Button onClick={handleNewEntryExpense} variant="light" className="rounded-0">
+                  <Button
+                    onClick={openIncomeNewEntry}
+                    variant="light"
+                    className="rounded-0"
+                  >
                     <Icon icon={withPlus} className="text-success" />
                   </Button>
-                  <Button variant="light" className="rounded-0">
+                  <Button
+                    onClick={openExpenseNewEntry}
+                    variant="light"
+                    className="rounded-0"
+                  >
                     <Icon icon={withMinus} className="text-danger" />
                   </Button>
                 </ButtonGroup>
               ),
-              AddExpense: ({ label, onChangeLabel, value, onChangeValue }) => (
-                <>
-                  <AmountInput
-                    label={label}
-                    value={value}
-                    onChange={onChangeValue}
-                  />
-                <ButtonGroup className="d-flex">
-                  <Button onClick={handleAddExpense} variant="light" className="rounded-0">
-                    <Icon icon={check} className="text-primary" />
-                  </Button>
-                  <Button variant="light">
-                    <Icon icon={back} />
-                  </Button>
-                </ButtonGroup>
-                </>
+              AddExpense: () => (
+                <NewEntry onSave={handleAddExpense} onCancel={closeNewEntry} />
               ),
-              AddIncome: ({ label, onChangeLabel, value, onChangeValue }) => (
-                <AmountInput
-                  label={label}
-                  value={value}
-                  onChange={onChangeValue}
-                />
+              AddIncome: () => (
+                <NewEntry onSave={handleAddIncome} onCancel={closeNewEntry} />
               )
             })(action)
           : null}
       </Card.Body>
-      {budget ? (
-        <Card.Footer className="fixed-bottom rounded-0 p-0">
-          <AmountInput readOnly label="SISA" />
-        </Card.Footer>
-      ) : null}
+      {budget ? <Remaining remaining={calculateRemaining()} /> : null}
     </Card>
   )
 }
