@@ -30,9 +30,9 @@ function parseMoney(amountString) {
 }
 
 function SingleInput(props) {
-  const { label, readOnly, value, onChange, className, onClick } = props
+  const { size, label, readOnly, value, onChange, className, onClick } = props
   return (
-    <InputGroup onClick={onClick}>
+    <InputGroup size={size} onClick={onClick}>
       <InputGroup.Prepend>
         <InputGroup.Text
           className={`border-0 rounded-0 font-weight-bold text-uppercase ${
@@ -172,6 +172,7 @@ function Remaining(props) {
           readOnly
           label="SISA"
           className="text-success"
+          size="lg"
         />
       </Card.Footer>
     )
@@ -184,6 +185,7 @@ function Remaining(props) {
           readOnly
           label="KURANG"
           className="text-danger"
+          size="lg"
         />
       </Card.Footer>
     )
@@ -191,16 +193,14 @@ function Remaining(props) {
   if (remaining === 0) {
     return (
       <Card.Footer className="fixed-bottom rounded-0 p-0">
-        <InputGroup>
+        <InputGroup size="lg">
           <Form.Control
             value="PAS"
             readOnly
             className="border-0 rounded-0 font-weight-bold text-info"
           />
           <InputGroup.Append>
-            <InputGroup.Text
-              className="border-0 rounded-0 font-weight-bold text-uppercase"
-            >
+            <InputGroup.Text className="border-0 rounded-0 font-weight-bold text-uppercase">
               <Icon icon={check} className="text-info" />
             </InputGroup.Text>
           </InputGroup.Append>
@@ -295,6 +295,7 @@ function App() {
           value={formatMoney(budget)}
           onChange={e => setBudget(parseMoney(e.target.value))}
           className="text-info"
+          size="lg"
         />
         {budget ? (
           <IncomeList onSelectItem={removeIncomeItem} incomes={incomes} />
